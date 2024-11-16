@@ -1,88 +1,108 @@
 #include <iostream>
-#include <asio.hpp>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 #include <thread>
-#include <memory>
-#include <locale>
-#include <mutex>
+#include <string>
 
-using asio::ip::tcp;
+#pragma comment(lib, "ws2_32.lib")
 
-class ChatClient {
-public:
-	ChatClient(const std::string& host, const std::string& port) 
-		: socket_(io_context_), idle_work_(io_context_) {
-		tcp::resolver resolver(io_context_);
-		auto endpoint = resolver.resolve(host, port);
-		asio::connect(socket_, endpoint);
-		
-		start_reading();
-	}
+using namespace std;
 
-	void send_message(std::string& msg) {
-		std::lock_guard<std::mutex> lock(socket_mutex);  // Блокируем сокет для отправки
-		try {
-			using namespace std::chrono_literals;
-			asio::async_write(socket_, asio::buffer(msg), [this](std::error_code ec, std::size_t /*length*/)
-				{
-					if (ec) {
-						std::cerr << "Error sending message: " << ec.message() << std::endl;
-					}
-			});
-			
-			std::this_thread::sleep_for(2000ms);
+bool Initialize()
+{
+	WSADATA data;
+	return WSAStartup(MAKEWORD(2, 2), &data) == 0;
+}
+
+void SendMsg(SOCKET s)
+{
+	cout << "enter your chat name: " << endl;
+	string name;
+	getline(cin, name);
+	string message;
+
+	while (1)
+	{
+		getline(cin, message);
+		string msg = name + " : " + message;
+		int bytessend = send(s, msg.c_str(), msg.length(), 0);
+		if (bytessend == SOCKET_ERROR)
+		{
+			cout << "error sending message" << endl;
+			break;
 		}
-		catch (const std::exception& e) {
-			std::cout << "Error with send: " << e.what();
+		if (message == "quit")
+		{
+			cout << "stopping the application" << endl;
+			break;
 		}
 	}
+	closesocket(s);
+	WSACleanup();
+}
 
-	void run() {
-		io_context_.run();
+void RecieveMsg(SOCKET s)
+{
+	char buffer[4096];
+	int recvlength; /*= recv(s, buffer, sizeof(buffer), 0);*/
+	string msg = "";
+	while (1)
+	{
+		recvlength = recv(s, buffer, sizeof(buffer), 0);
+		if (recvlength <= 0)
+		{
+			cout << "disconnected from the server" << endl;
+			break;
+		}
+		else
+		{
+			msg = string(buffer, recvlength);
+			cout << msg << endl;
+		}
 	}
-
-private:
-	void start_reading() {
-		//auto buffer = new std::array<char, 1024>;
-		auto buffer = std::make_shared<std::array<char, 1024>>();
-		socket_.async_read_some(asio::buffer(*buffer, sizeof(char) * 1024),
-			[this, buffer](std::error_code ec, std::size_t length) {
-				if (!ec) {
-					if (length > 0) {
-
-						std::string message(buffer->data(), length);
-						std::cout << "Recieved: " << message << std::endl;
-						start_reading();
-					}
-				}
-				else {
-					std::cerr << "Error reading message: " << ec.message() << std::endl;
-				}
-			});
-		using namespace std::chrono_literals;
-		//std::this_thread::sleep_for(2000ms);
-	}
-
-	asio::io_context io_context_;
-	asio::io_context::work idle_work_;
-	tcp::socket socket_;
-	std::mutex socket_mutex;  // Мьютекс для защиты сокета и буфера
-};
+	closesocket(s);
+	WSACleanup();
+}
 
 int main()
 {
-	std::locale::global(std::locale(""));
-	try {
-		ChatClient client("127.0.0.1", "12345");
-		std::thread t([&client]() { client.run(); });
-
-		std::string msg;
-		while (std::getline(std::cin, msg)) {
-			client.send_message(msg);
-		}
-
-		t.join();
+	if (!Initialize())
+	{
+		cout << "initialize winsock failed" << endl;
+		return 1;
 	}
-	catch (std::exception& err) {
-		std::cerr << "Exception: " << err.what() << std::endl;
-	}	
+
+	SOCKET s;
+	s = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (s == INVALID_SOCKET)
+	{
+		cout << "invalid socket created" << endl;
+		return 1;
+	}
+
+	int port = 12345;
+	string serveraddress = "127.0.0.1";
+	sockaddr_in serveraddr;
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_port = htons(port);
+	inet_pton(AF_INET, serveraddress.c_str(), &(serveraddr.sin_addr));
+
+	if (connect(s, reinterpret_cast<sockaddr*>(&serveraddr), sizeof(serveraddr)) == SOCKET_ERROR)
+	{
+		cout << "not able to connect to server" << endl;
+		closesocket(s);
+		WSACleanup();
+		return 1;
+	}
+
+	cout << "successfully connected to server" << endl;
+
+	thread senderthread(SendMsg, s);
+	thread receiver(RecieveMsg, s);
+
+	senderthread.join();
+	receiver.join();
+
+	return 0;
 }
