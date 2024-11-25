@@ -34,7 +34,7 @@ const TabIcon = ({
   );
 };
 
-const ChatsLayout = () => {
+const TabsLayout = () => {
   return (
     <>
       <Tabs
@@ -65,7 +65,7 @@ const ChatsLayout = () => {
               <TabIcon
                 icon={icons.home}
                 color={color}
-                name="Home"
+                name="Chat"
                 focused={focused}
               />
             ),
@@ -76,4 +76,4 @@ const ChatsLayout = () => {
   );
 };
 
-export default ChatsLayout;
+export default TabsLayout;

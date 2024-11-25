@@ -1,23 +1,11 @@
 const net = require("net");
-const readline = require("readline");
 
-function interactionWithTheServer() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
+function interactionWithTheServer(name, code) {
   const client = net.createConnection(
     { host: "127.0.0.1", port: 12345 },
     () => {
       console.log("Есть подключение");
-      rl.question("Whats your name: ", (answer) => {
-        const name = answer;
-        rl.on("line", (msg) => {
-          if (msg === "/quit") rl.close();
-          client.write(`${name}: ${msg}`);
-        });
-      });
+      client.write(`${name}:${code}`);
     }
   );
 
