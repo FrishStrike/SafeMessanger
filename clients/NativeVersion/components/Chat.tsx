@@ -1,13 +1,22 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { icons } from "@/constants";
 
-interface IChat {
+export interface IChat {
   name: string;
+  code: string;
   icon?: string;
+  chats?: Array<IChat>;
+  setChats: (chats: Array<IChat>) => void;
 }
 
-const Chat: React.FC<IChat> = ({ name, icon }) => {
+const Chat: React.FC<IChat> = ({ name, icon, code, chats, setChats }) => {
+  const removeChat = () => {
+    if (chats) {
+      setChats(chats.filter((chat) => chat.code != code));
+    }
+  };
+
   return (
     <View
       className="
@@ -27,7 +36,9 @@ const Chat: React.FC<IChat> = ({ name, icon }) => {
         <Image source={icon ? icon : icons.user} className="w-10 h-10" />
         <Text className="font-psemibold text-xl">{name}</Text>
       </View>
-      <Image source={icons.close} className="w-8 h-8" />
+      <TouchableOpacity onPress={removeChat}>
+        <Image source={icons.close} className="w-8 h-8" />
+      </TouchableOpacity>
     </View>
   );
 };

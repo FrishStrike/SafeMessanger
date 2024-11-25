@@ -5,16 +5,27 @@ import { IModal } from "./Modal";
 import FormField from "./FormField";
 import CustomButton from "./CustomButton";
 import interactionWithServer from "@/scripts/client";
+import { IChat } from "./Chat";
 
-interface IAddChatModal extends IModal {}
+interface IAddChatModal extends IModal {
+  chats: Array<IChat>;
+  setChats: (chats: Array<IChat>) => void;
+}
 
-const AddChatModal: React.FC<IAddChatModal> = ({ active, setActive }) => {
+const AddChatModal: React.FC<IAddChatModal> = ({
+  active,
+  chats,
+  setActive,
+  setChats,
+}) => {
   const [form, setForm] = useState({
     name: "",
     code: "",
   });
 
   const addNewChat = () => {
+    chats.push({ name: form.name, code: form.code, setChats: setChats });
+    setChats(chats);
     // interactionWithServer(form.name, form.code);
     setForm({ name: "", code: "" });
     setActive(false);

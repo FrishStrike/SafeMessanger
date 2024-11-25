@@ -13,7 +13,8 @@ const Modal: React.FC<IModal> = ({ active, setActive, children }) => {
       onPress={() => setActive(false)}
       className={`
         ${active ? "fixed" : "hidden"}
-        fixed
+        absolute
+        z-10
         h-full
         w-full
         top-0
