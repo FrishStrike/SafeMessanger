@@ -44,7 +44,7 @@ void SendMsg(SOCKET s)
 void RecieveMsg(SOCKET s)
 {
 	char buffer[4096];
-	int recvlength; /*= recv(s, buffer, sizeof(buffer), 0);*/
+	int recvlength;
 	string msg = "";
 	while (1)
 	{

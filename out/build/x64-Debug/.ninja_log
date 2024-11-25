@@ -1,6 +1,0 @@
-# ninja log v5
-5	1401	7534212380759223	CMakeFiles/server.dir/another_src/server.cpp.obj	fec34d2dc2c88a0a
-7	3354	7533148081944879	CMakeFiles/server.dir/src/server.cpp.obj	4240c17872caaa6d
-1402	2657	7534212393090720	server.exe	ca77810bce90bb0f
-2	1792	7534212749001280	CMakeFiles/client.dir/another_src/client.cpp.obj	c5b1bd9f7659d051
-1793	2405	7534212754848528	client.exe	3b8a7bb1afd35bed

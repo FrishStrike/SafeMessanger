@@ -1,9 +1,11 @@
 #include <iostream>
+#include <algorithm>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <tchar.h>
 #include <thread>
 #include <vector>
+#include <unordered_map>
 
 
 #pragma comment(lib, "ws2_32.lib")
@@ -51,6 +53,7 @@ void InteractWithClient(SOCKET clientSocket, vector<SOCKET>& clients)
 
 int main()
 {
+	setlocale(0, "");
 	if (!Initialize())
 	{
 		cout << "winsock initialization failed" << endl;
@@ -96,6 +99,7 @@ int main()
 
 	cout << "server has started listening on port: " << port << endl;
 	vector<SOCKET> clients;
+	unordered_map<string, vector<SOCKET>> users;
 
 	while (1)
 	{
@@ -111,7 +115,6 @@ int main()
 	}
 
 	closesocket(listenSocket);
-
 
 	WSACleanup();
 	return 0;
