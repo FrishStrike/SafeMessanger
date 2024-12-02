@@ -13,6 +13,7 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import user from "../assets/icons/user.png";
 import close from "../assets/icons/close.png";
+import send from "../assets/icons/send.png";
 
 export default {
   play,
@@ -30,4 +31,5 @@ export default {
   eye,
   user,
   close,
+  send,
 };

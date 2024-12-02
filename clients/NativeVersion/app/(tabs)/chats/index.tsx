@@ -16,12 +16,13 @@ const Chats = () => {
   const [chats, setChats] = useState<Array<IChat>>([]);
 
   useEffect(() => {
-    if (!chats.length) setIsEmpty(true);
-    else setIsEmpty(false);
+    if (!chats.length) {
+      setIsEmpty(true);
+    } else setIsEmpty(false);
   }, [chats.length]);
 
   return (
-    <View className={`${isEmpty ? "items-center justify-center" : ""} h-full`}>
+    <View className="h-full">
       <AddChatModal
         active={modalActive}
         chats={chats}

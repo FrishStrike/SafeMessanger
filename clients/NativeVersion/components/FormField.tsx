@@ -58,7 +58,7 @@ const FormField: React.FC<IFormField> = ({
           {...props}
         />
 
-        {title === "Password" && (
+        {title === "Password" ? (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={!showPassword ? icons.eye : icons.eyeHide}
@@ -66,6 +66,22 @@ const FormField: React.FC<IFormField> = ({
               resizeMode="contain"
             />
           </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+        {title === "Message" ? (
+          <TouchableOpacity
+            onPress={props.sendMessage}
+            className="w-10 h-10 items-center justify-center"
+          >
+            <Image
+              source={icons.send}
+              className="w-6 h-6"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
         )}
       </View>
     </View>

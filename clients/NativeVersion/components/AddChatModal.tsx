@@ -24,6 +24,7 @@ const AddChatModal: React.FC<IAddChatModal> = ({
   });
 
   const addNewChat = () => {
+    if (form.code === "" || form.name === "") return;
     chats.push({ name: form.name, code: form.code });
     setChats(chats);
     // interactionWithServer(form.name, form.code);

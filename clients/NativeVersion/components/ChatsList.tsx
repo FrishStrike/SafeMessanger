@@ -27,7 +27,7 @@ const ChatsList: React.FC<IChatsLists> = ({
         className="p-2"
         data={chats}
         keyExtractor={(item) => item.code}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <Chat
               code={item.code}
@@ -38,9 +38,11 @@ const ChatsList: React.FC<IChatsLists> = ({
           );
         }}
         ListEmptyComponent={() => (
-          <Text className="mb-10 text-4xl font-psemibold">
-            Oh, You don't have chats
-          </Text>
+          <View className="mt-[50%]">
+            <Text className="mb-10 text-4xl font-psemibold">
+              Oh, You don't have chats
+            </Text>
+          </View>
         )}
         ListFooterComponent={() => (
           <CustomButton
@@ -50,17 +52,6 @@ const ChatsList: React.FC<IChatsLists> = ({
           />
         )}
       />
-      {/* // chats &&
-    // chats.map((chat, key) => (
-    //   <Chat
-    //     key={key}
-    //     name={chat.name}
-    //     code={chat.code}
-    //     icon={chat.icon}
-    //     chats={chats}
-    //     setChats={setChats}
-    //   />
-    // )) */}
     </SafeAreaView>
   );
 };
