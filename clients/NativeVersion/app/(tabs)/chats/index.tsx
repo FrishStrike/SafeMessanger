@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import ChatsList from "@/components/ChatsList";
 import AddChatModal from "@/components/AddChatModal";
-import { IChat } from "@/components/Chat";
+
+export interface IChat {
+  name: string;
+  code: string;
+  icon?: string;
+}
 
 const Chats = () => {
   const [isEmpty, setIsEmpty] = useState(false);

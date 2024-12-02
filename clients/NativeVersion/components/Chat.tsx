@@ -2,22 +2,13 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { icons } from "@/constants";
 import { Link } from "expo-router";
+import { IChat } from "@/app/(tabs)/chats";
 
-export interface IChat {
-  name: string;
-  code: string;
-  icon?: string;
-  chats?: Array<IChat>;
-  setChats?: (chats: Array<IChat>) => void;
+interface IChatView extends IChat {
+  removeChat: (code: string) => void;
 }
 
-const Chat: React.FC<IChat> = ({ name, icon, code, chats, setChats }) => {
-  const removeChat = () => {
-    if (chats && setChats) {
-      setChats(chats.filter((chat) => chat.code != code));
-    }
-  };
-
+const Chat: React.FC<IChatView> = ({ name, icon, code, removeChat }) => {
   return (
     <Link href="/chats/chat_content" className="mb-3">
       <View
@@ -38,7 +29,7 @@ const Chat: React.FC<IChat> = ({ name, icon, code, chats, setChats }) => {
           <Image source={icon ? icon : icons.user} className="w-10 h-10" />
           <Text className="font-psemibold text-xl">{name}</Text>
         </View>
-        <TouchableOpacity onPress={removeChat}>
+        <TouchableOpacity onPress={() => removeChat(code)}>
           <Image source={icons.close} className="w-8 h-8" />
         </TouchableOpacity>
       </View>
