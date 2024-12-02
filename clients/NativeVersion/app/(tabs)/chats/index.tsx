@@ -16,28 +16,18 @@ const Chats = () => {
   }, [chats.length]);
 
   return (
-    <View>
-      <View
-        className={`${isEmpty ? "items-center justify-center" : ""} h-full`}
-      >
-        <AddChatModal
-          active={modalActive}
-          chats={chats}
-          setActive={setModalActive}
-          setChats={setChats}
-        />
-        <ChatsList chats={chats} setChats={setChats} />
-        <Text
-          className={`${isEmpty ? "" : "hidden"} mb-10 text-4xl font-psemibold`}
-        >
-          Oh, You don't have chats
-        </Text>
-        <CustomButton
-          containerStyles="my-2 mx-4"
-          title="Add Chat"
-          handlePress={() => setModalActive(true)}
-        />
-      </View>
+    <View className={`${isEmpty ? "items-center justify-center" : ""} h-full`}>
+      <AddChatModal
+        active={modalActive}
+        chats={chats}
+        setActive={setModalActive}
+        setChats={setChats}
+      />
+      <ChatsList
+        chats={chats}
+        setChats={setChats}
+        setModalActive={setModalActive}
+      />
     </View>
   );
 };

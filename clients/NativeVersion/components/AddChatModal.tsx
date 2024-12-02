@@ -36,16 +36,16 @@ const AddChatModal: React.FC<IAddChatModal> = ({
       <Text className="text-3xl text-center">Add new chat</Text>
       <FormField
         fieldStyles="bg-white"
-        inputStyles="text-black-200 font-semibold text-xl"
-        titleStyle="text-black-200"
+        inputStyles="text-black font-semibold text-xl"
+        titleStyle=""
         title="Name"
         value={form.name}
         handleChangeText={(e) => setForm({ ...form, name: e })}
       />
       <FormField
         fieldStyles="bg-white"
-        inputStyles="text-black-200 font-semibold text-xl"
-        titleStyle="text-black-200"
+        inputStyles="text-black font-semibold text-xl"
+        titleStyle="text-black"
         title="Code"
         value={form.code}
         handleChangeText={(e) => setForm({ ...form, code: e })}

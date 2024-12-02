@@ -30,9 +30,7 @@ const FormField: React.FC<IFormField> = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className={`text-base text-gray-100 font-pmedium ${titleStyle}`}>
-        {title}
-      </Text>
+      <Text className={`text-base font-pmedium ${titleStyle}`}>{title}</Text>
 
       <View
         className={`
@@ -51,7 +49,7 @@ const FormField: React.FC<IFormField> = ({
         `}
       >
         <TextInput
-          className={`flex-1 text-white font-psemibold text-base ${inputStyles}`}
+          className={`flex-1 font-psemibold text-base ${inputStyles}`}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"

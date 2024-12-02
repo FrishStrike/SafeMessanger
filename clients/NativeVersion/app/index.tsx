@@ -1,11 +1,5 @@
-import {
-  Text,
-  View,
-  ScrollView,
-  Image,
-  GestureResponderEvent,
-} from "react-native";
-import { Link, Redirect, router } from "expo-router";
+import { Text, View, ScrollView, Image } from "react-native";
+import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../constants";
 import { StatusBar } from "expo-status-bar";

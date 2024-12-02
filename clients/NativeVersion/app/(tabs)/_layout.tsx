@@ -1,17 +1,15 @@
 import { View, Text, ImageSourcePropType, Image } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import { icons } from "@/constants";
+import icons from "@/constants/icons";
 
 const TabIcon = ({
   icon,
   color,
-  name,
   focused,
 }: {
   icon: string;
   color: string;
-  name: string;
   focused: boolean;
 }) => {
   return (
@@ -22,14 +20,6 @@ const TabIcon = ({
         tintColor={color}
         className="w-6 h-6"
       />
-      <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
-        style={{
-          color: color,
-        }}
-      >
-        {name}
-      </Text>
     </View>
   );
 };
@@ -39,7 +29,7 @@ const TabsLayout = () => {
     <>
       <Tabs
         screenOptions={{
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
           tabBarActiveTintColor: "#FFA001",
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarStyle: {
@@ -51,24 +41,16 @@ const TabsLayout = () => {
         }}
       >
         <Tabs.Screen
-          name="Chats"
+          name="chats"
           options={{
-            title: "Home",
-            headerShown: false,
+            headerShown: true,
             tabBarIcon: ({
               color,
               focused,
             }: {
               color: string;
               focused: boolean;
-            }) => (
-              <TabIcon
-                icon={icons.home}
-                color={color}
-                name="Chat"
-                focused={focused}
-              />
-            ),
+            }) => <TabIcon icon={icons.home} color={color} focused={focused} />,
           }}
         />
       </Tabs>
