@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "@/components/CustomButton";
 import ChatsList from "@/components/ChatsList";
 import AddChatModal from "@/components/AddChatModal";
 

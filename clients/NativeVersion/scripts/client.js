@@ -1,21 +1,40 @@
-const net = require("net");
+const WebSocket = require("ws");
 
-function interactionWithTheServer(name, code) {
-  const client = net.createConnection(
-    { host: "127.0.0.1", port: 12345 },
-    () => {
-      console.log("Есть подключение");
-      client.write(`${name}:${code}`);
-    }
-  );
+const ws = new WebSocket("ws://192.168.0.104:12345");
 
-  client.on("data", (data) => {
-    console.log(data.toString());
+ws.on("open", function open() {
+  console.log("Соединение установлено");
+  ws.send("Тестовое сообщение");
+  sendMessage();
+});
+
+ws.on("message", function incoming(data) {
+  console.log(`Сообщение от сервера: ${data}`);
+});
+
+ws.on("close", function close() {
+  console.log("Соединение закрыто");
+});
+
+ws.on("error", function error(err) {
+  console.error("Ошибка:", err.message);
+});
+
+function sendMessage() {
+  const readline = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout,
   });
 
-  client.on("end", () => {
-    console.log("Соединение с сервером разорвано.");
+  readline.on("line", (message) => {
+    if (message === "/quit") {
+      console.log("Выход...");
+      ws.close();
+      readline.close();
+      return;
+    }
+
+    ws.send(message);
+    readline.prompt();
   });
 }
-
-export default interactionWithTheServer;

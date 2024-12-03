@@ -4,13 +4,15 @@ import { icons } from "@/constants";
 import { Link } from "expo-router";
 import { IChat } from "@/app/(tabs)/chats";
 
-interface IChatView extends IChat {
+export interface IChatView extends IChat {
   removeChat: (code: string) => void;
 }
 
-const Chat: React.FC<IChatView> = ({ name, icon, code, removeChat }) => {
+const Chat: React.FC<IChatView> = (props) => {
+  const serializedData = encodeURIComponent(JSON.stringify(props));
+
   return (
-    <Link href="/chats/chat_content" className="mb-3">
+    <Link href={`/chats/chat_content?data=${serializedData}`} className="mb-3">
       <View
         className="
       w-full
@@ -26,10 +28,13 @@ const Chat: React.FC<IChatView> = ({ name, icon, code, removeChat }) => {
       "
       >
         <View className="flex-row gap-4 items-center h-[26px]">
-          <Image source={icon ? icon : icons.user} className="w-10 h-10" />
-          <Text className="font-psemibold text-xl">{name}</Text>
+          <Image
+            source={props.icon ? props.icon : icons.user}
+            className="w-10 h-10"
+          />
+          <Text className="font-psemibold text-xl">{props.name}</Text>
         </View>
-        <TouchableOpacity onPress={() => removeChat(code)}>
+        <TouchableOpacity onPress={() => props.removeChat(props.code)}>
           <Image source={icons.close} className="w-8 h-8" />
         </TouchableOpacity>
       </View>
