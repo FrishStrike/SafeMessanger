@@ -8,11 +8,21 @@ import { IChatView } from "@/components/Chat";
 
 export interface IMessage {
   isMyMsg: boolean;
-  text: string;
+  name: string;
+  time: string;
+  message: string;
 }
 
-const WS_URL = "ws://192.168.0.104:12345";
-// const messages: Array<IMessage> = [];
+export interface messageJson extends IMessage {}
+
+const HOST = process.env.EXPO_PUBLIC_API_URL;
+const PORT = process.env.EXPO_PUBLIC_API_PORT;
+
+const WS_URL = `${HOST}:${PORT}`;
+
+const name = "Hui";
+
+console.log(WS_URL);
 
 const ChatContent = () => {
   const data = useLocalSearchParams()["data"];
@@ -26,10 +36,17 @@ const ChatContent = () => {
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
+  const getTime = () => {
+    const date = new Date();
+    return `${date.getHours()}:${date.getMinutes()}`;
+  };
+
   const sendMessage = (msg: string) => {
     if (ws && ws.readyState === WebSocket.OPEN && msg !== "") {
-      ws.send(msg);
-      messages.push({ text: msg, isMyMsg: true });
+      const time = getTime();
+      const data = JSON.stringify({ message: msg, name: name, time: time });
+      ws.send(data);
+      messages.push({ message: msg, isMyMsg: true, name: name, time: time });
       setMessages(messages);
       setValue("");
     }
@@ -47,11 +64,16 @@ const ChatContent = () => {
     };
 
     socket.onmessage = async (event) => {
-      const blob = event.data;
+      const data: messageJson = JSON.parse(event.data);
+      const time = getTime();
+      console.log("Получено сообщение:", event.data);
 
-      console.log("Получено сообщение:", event);
-
-      messages.push({ text: blob, isMyMsg: false });
+      messages.push({
+        message: data.message,
+        isMyMsg: false,
+        name: data.name,
+        time: time,
+      });
       console.log("messages after push", messages);
 
       setMessages([...messages]);
@@ -93,7 +115,12 @@ const ChatContent = () => {
         contentContainerStyle={{ flexDirection: "column-reverse" }}
         data={messages}
         renderItem={({ item }) => (
-          <Message isMyMsg={item.isMyMsg} text={item.text} />
+          <Message
+            isMyMsg={item.isMyMsg}
+            message={item.message}
+            name={item.name}
+            time={item.time}
+          />
         )}
       />
       <View>

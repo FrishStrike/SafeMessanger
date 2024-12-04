@@ -6,6 +6,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+const name = "misha";
+
 const client = net.createConnection({ host: "127.0.0.1", port: 12345 }, () => {
   console.log("Есть подключение");
   rl.question("Whats your name: ", (answer) => {

@@ -10,7 +10,7 @@ wss.on("connection", (ws) => {
 
   // Обрабатываем входящие сообщения
   ws.on("message", (message) => {
-    console.log(`Получено сообщение: ${message}`, message);
+    console.log(`Получено сообщение: ${message}`, message.buffer);
 
     // Рассылаем сообщение всем подключенным клиентам
     for (const client of clients) {

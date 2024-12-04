@@ -1,10 +1,13 @@
 const WebSocket = require("ws");
+require("dotenv").config();
 
-const ws = new WebSocket("ws://192.168.0.104:12345");
+const HOST = process.env.EXPO_PUBLIC_API_URL;
+const PORT = process.env.EXPO_PUBLIC_API_PORT;
+
+const ws = new WebSocket(`${HOST}:${PORT}`);
 
 ws.on("open", function open() {
   console.log("Соединение установлено");
-  ws.send("Тестовое сообщение");
   sendMessage();
 });
 
@@ -26,15 +29,19 @@ function sendMessage() {
     output: process.stdout,
   });
 
-  readline.on("line", (message) => {
-    if (message === "/quit") {
-      console.log("Выход...");
-      ws.close();
-      readline.close();
-      return;
-    }
-
-    ws.send(message);
-    readline.prompt();
+  readline.question("What's your name? ", (name) => {
+    readline.on("line", (message) => {
+      if (message === "/quit") {
+        console.log("Выход...");
+        ws.close();
+        readline.close();
+        return;
+      }
+      const date = new Date();
+      const time = `${date.getHours()}:${date.getMinutes()}`;
+      const data = JSON.stringify({ message: message, name: name, time: time });
+      ws.send(data);
+      readline.prompt();
+    });
   });
 }

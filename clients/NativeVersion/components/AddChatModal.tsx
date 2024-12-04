@@ -4,7 +4,6 @@ import Modal from "./Modal";
 import { IModal } from "./Modal";
 import FormField from "./FormField";
 import CustomButton from "./CustomButton";
-import interactionWithServer from "@/scripts/client";
 import { IChat } from "@/app/(tabs)/chats";
 
 interface IAddChatModal extends IModal {
@@ -27,7 +26,6 @@ const AddChatModal: React.FC<IAddChatModal> = ({
     if (form.code === "" || form.name === "") return;
     chats.push({ name: form.name, code: form.code });
     setChats(chats);
-    // interactionWithServer(form.name, form.code);
     setForm({ name: "", code: "" });
     setActive(false);
   };
