@@ -14,6 +14,7 @@ import play from "../assets/icons/play.png";
 import user from "../assets/icons/user.png";
 import close from "../assets/icons/close.png";
 import send from "../assets/icons/send.png";
+import notifications from "../assets/icons/notification.png";
 
 export default {
   play,
@@ -32,4 +33,5 @@ export default {
   user,
   close,
   send,
+  notifications,
 };

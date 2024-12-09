@@ -53,6 +53,25 @@ const TabsLayout = () => {
             }) => <TabIcon icon={icons.home} color={color} focused={focused} />,
           }}
         />
+        <Tabs.Screen
+          name="notifications"
+          options={{
+            headerShown: true,
+            tabBarIcon: ({
+              color,
+              focused,
+            }: {
+              color: string;
+              focused: boolean;
+            }) => (
+              <TabIcon
+                icon={icons.notifications}
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
       </Tabs>
     </>
   );

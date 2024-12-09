@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
 
 require("dotenv").config();
 
@@ -41,9 +42,39 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users/login", async (req, res) => {
   try {
-    const newUser = new User(req.body);
+    const user = await User.findOne({ nickname: req.body.nickname });
+    console.log("Server found user for login", user);
+
+    if (!user.password)
+      return res.status(404).json({ error: "User is not defined!" });
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    console.log("Password Match ", passwordMatch);
+
+    if (!passwordMatch)
+      return res.status(401).json({ error: "The password is not corrected!" });
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.post("/users/registrations", async (req, res) => {
+  try {
+    const existingUser = await User.findOne({ nickname: req.body.nickname });
+    console.log("Exist user", existingUser);
+    if (existingUser)
+      return res.status(404).json({ message: "User is already exist!" });
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = new User({ ...req.body, password: hashedPassword });
+    console.log("Express server new user ", newUser);
+
     await newUser.save();
     res.status(201).json(newUser);
   } catch (error) {

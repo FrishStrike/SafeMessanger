@@ -4,20 +4,42 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "@/constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link, RelativePathString } from "expo-router";
+import { Link, RelativePathString, router } from "expo-router";
+import axios, { AxiosError, isAxiosError } from "axios";
 
 const SignIn = () => {
   const [form, setForm] = useState({
-    email: "",
+    login: "",
     password: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = async () => {
-    if (!form.email || !form.password) {
+    if (!form.login || !form.password) {
       Alert.alert("Error", "Please fill all the fields");
+      return;
     }
+
+    try {
+      const newUser = await axios.post(
+        `http://192.168.0.105:3000/users/login`,
+        {
+          nickname: form.login,
+          password: form.password,
+        }
+      );
+      console.log(newUser.data);
+      router.push("/(tabs)/notifications/notifications");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log("Axios error", error);
+        Alert.alert(error.message);
+      } else Alert.alert("Ups something went wrong(");
+      setForm({ login: "", password: "" });
+      return;
+    }
+    setIsSubmitting(true);
 
     setIsSubmitting(true);
   };
@@ -32,22 +54,23 @@ const SignIn = () => {
             className="w-[115px] h-[35px]"
           />
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">
-            Log in to Aora
+            Log in to Chat Me
           </Text>
 
           <FormField
-            title="Email"
-            value={form.email}
-            handleChangeText={(e) => setForm({ ...form, email: e })}
+            title="Login"
+            value={form.login}
+            handleChangeText={(e) => setForm({ ...form, login: e })}
             otherStyles="mt-7"
-            keyboardType="email-address"
-            placeholder="example@gmail.com"
+            titleStyle="text-white"
+            placeholder="login"
           />
           <FormField
             title="Password"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
+            titleStyle="text-white"
             placeholder="********"
           />
 
