@@ -14,16 +14,17 @@ const SignUp = () => {
     password: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submit = async () => {
     if (!form.name || !form.login || !form.password) {
       Alert.alert("Error", "Please fill all the fields");
       return;
     }
+    setIsLoading(true);
     try {
       const newUser = await axios.post(
-        `http://192.168.0.105:3000/users/registrations`,
+        `http://${process.env.EXPO_PUBLIC_API_URL}:3000/users/registrations`,
         {
           name: form.name,
           nickname: form.login,
@@ -31,16 +32,24 @@ const SignUp = () => {
         }
       );
       console.log(newUser.data);
-      router.push("/(tabs)/notifications/notifications");
+      const serializedData = encodeURIComponent(
+        JSON.stringify({
+          nickname: newUser.data.nickname,
+          name: newUser.data.name,
+          _id: newUser.data._id,
+        })
+      );
+      router.push(`/(tabs)/notifications/notifications?data=${serializedData}`);
     } catch (error) {
       if (isAxiosError(error)) {
-        console.log("Axios error", error.response?.data);
-        Alert.alert(error.message);
+        console.log("Axios error", error);
+        Alert.alert("User is already exist!");
       } else Alert.alert("Ups something went wrong");
       setForm({ login: "", name: "", password: "" });
+      setIsLoading(false);
       return;
     }
-    setIsSubmitting(true);
+    setIsLoading(false);
   };
 
   return (
@@ -62,6 +71,7 @@ const SignUp = () => {
             handleChangeText={(e) => setForm({ ...form, name: e })}
             otherStyles="mt-10"
             titleStyle="text-white"
+            inputStyles="text-white"
             placeholder="name"
           />
           <FormField
@@ -70,12 +80,14 @@ const SignUp = () => {
             handleChangeText={(e) => setForm({ ...form, login: e })}
             otherStyles="mt-7"
             titleStyle="text-white"
+            inputStyles="text-white"
             keyboardType="email-address"
             placeholder="login"
           />
           <FormField
             title="Password"
             titleStyle="text-white"
+            inputStyles="text-white"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
@@ -86,7 +98,7 @@ const SignUp = () => {
             title="Sign Up"
             handlePress={submit}
             containerStyles="mt-7"
-            isLoading={isSubmitting}
+            isLoading={isLoading}
           />
           <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">

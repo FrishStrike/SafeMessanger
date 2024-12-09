@@ -49,7 +49,9 @@ const FormField: React.FC<IFormField> = ({
         `}
       >
         <TextInput
-          className={`flex-1 font-psemibold text-white text-base ${inputStyles}`}
+          className={`flex-1 font-psemibold text-base ${
+            inputStyles ? inputStyles : "text-black"
+          }`}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"

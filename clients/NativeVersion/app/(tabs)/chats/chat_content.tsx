@@ -15,7 +15,7 @@ export interface IMessage {
 
 export interface messageJson extends IMessage {}
 
-const HOST = process.env.EXPO_PUBLIC_API_URL;
+const HOST = `ws://${process.env.EXPO_PUBLIC_API_URL}`;
 const PORT = process.env.EXPO_PUBLIC_API_PORT;
 
 const WS_URL = `${HOST}:${PORT}`;

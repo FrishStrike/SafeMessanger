@@ -7,9 +7,11 @@ const CustomButton = ({
   containerStyles,
   textStyles,
   isLoading,
+  bgColor,
 }: {
   title: string;
   handlePress: (event: GestureResponderEvent) => void;
+  bgColor?: string;
   containerStyles?: string;
   textStyles?: string;
   isLoading?: boolean;
@@ -19,7 +21,7 @@ const CustomButton = ({
       onPress={handlePress}
       activeOpacity={1}
       className={`
-        bg-secondary
+        ${bgColor ? bgColor : "bg-secondary"}
         rounded-xl
         min-h-[62px]
         justify-center 
